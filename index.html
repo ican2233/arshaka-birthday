@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕷️ Happy Birthday Arshaka! 🕷️</title>
+    <title>️ Happy Birthday Arshaka! 🕷️</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -16,7 +16,6 @@
             text-align: center;
         }
         
-        /* Animated Web Background */
         body::before {
             content: '';
             position: fixed;
@@ -36,7 +35,6 @@
 
         .container { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 20px; }
         
-        /* Spiderman Hanging Animation */
         .spiderman-hero {
             position: relative;
             width: 100%;
@@ -57,7 +55,6 @@
             50% { transform: translateY(20px) rotate(3deg); }
         }
         
-        /* Web Line */
         .web-line {
             position: absolute;
             top: 0;
@@ -74,7 +71,6 @@
             50% { transform: translateX(-50%) rotate(5deg); }
         }
         
-        /* Photo Frame with Spiderman Style */
         .photo-frame { 
             width: 200px; 
             height: 200px; 
@@ -83,7 +79,7 @@
             border: 8px solid #FFD700; 
             overflow: hidden; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 50px rgba(255,215,0,0.5); 
-            animation: photoFloat 4s ease-in-out infinite, rotate360 20s linear infinite; 
+            animation: photoFloat 4s ease-in-out infinite; 
             position: relative;
             z-index: 2;
         }
@@ -96,12 +92,6 @@
         @keyframes photoFloat {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-15px); }
-        }
-        
-        @keyframes rotate360 {
-            from { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0px rgba(255,215,0,0.3); }
-            50% { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 50px rgba(255,215,0,0.8); }
-            to { box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0px rgba(255,215,0,0.3); }
         }
 
         .title { 
@@ -141,18 +131,12 @@
             color: #FFD700; 
             text-shadow: 4px 4px 8px rgba(0,0,0,0.7); 
             margin: 10px 0; 
-            animation: ageBounce 1s ease-in-out infinite, spin 3s linear infinite; 
+            animation: ageBounce 1s ease-in-out infinite; 
         }
         
         @keyframes ageBounce { 
             0%, 100% { transform: translateY(0) scale(1); } 
             50% { transform: translateY(-20px) scale(1.1); } 
-        }
-        
-        @keyframes spin {
-            0%, 100% { transform: rotate(0deg) translateY(0); }
-            25% { transform: rotate(5deg) translateY(-20px); }
-            75% { transform: rotate(-5deg) translateY(-20px); }
         }
         
         .message { 
@@ -251,7 +235,23 @@
             font-family: Arial, sans-serif; 
         }
         
-        /* Floating Balloons */
+        /* INI BAGIAN PENTING: Menyembunyikan Header Cbox */
+        .cbox-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        .cbox-wrapper iframe {
+            position: absolute;
+            top: -100px;
+            left: 0;
+            width: 100%;
+            height: 280px;
+        }
+        
         .balloon {
             position: fixed;
             width: 50px;
@@ -278,19 +278,14 @@
                 transform: translateY(100vh) rotate(0deg);
                 opacity: 0;
             }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.8;
-            }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
             100% {
                 transform: translateY(-100vh) rotate(360deg);
                 opacity: 0;
             }
         }
         
-        /* Spider Web Particles */
         .web-particle {
             position: fixed;
             width: 4px;
@@ -306,12 +301,8 @@
                 transform: translateY(100vh) translateX(0);
                 opacity: 0;
             }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% {
                 transform: translateY(-100vh) translateX(100px);
                 opacity: 0;
@@ -331,7 +322,6 @@
             to { transform: translateY(100vh) rotate(360deg); } 
         }
         
-        /* Sparkle Effect */
         .sparkle {
             position: fixed;
             width: 10px;
@@ -365,32 +355,23 @@
     </style>
 </head>
 <body>
-    <!-- Floating Balloons Container -->
     <div id="balloons"></div>
-    
-    <!-- Web Particles Container -->
     <div id="webParticles"></div>
 
     <div class="container">
-        <!-- Spiderman Hanging Animation -->
         <div class="spiderman-hero">
             <div class="web-line"></div>
             <svg class="spiderman-svg" viewBox="0 0 100 100">
-                <!-- Spiderman Body -->
                 <circle cx="50" cy="30" r="15" fill="#E62429" stroke="#2B3784" stroke-width="2"/>
                 <ellipse cx="50" cy="55" rx="18" ry="25" fill="#E62429" stroke="#2B3784" stroke-width="2"/>
-                <!-- Spiderman Eyes -->
                 <ellipse cx="45" cy="28" rx="4" ry="6" fill="white" stroke="#2B3784" stroke-width="1"/>
                 <ellipse cx="55" cy="28" rx="4" ry="6" fill="white" stroke="#2B3784" stroke-width="1"/>
                 <ellipse cx="45" cy="28" rx="2" ry="4" fill="#2B3784"/>
                 <ellipse cx="55" cy="28" rx="2" ry="4" fill="#2B3784"/>
-                <!-- Spiderman Arms -->
                 <path d="M 32 50 Q 15 60 10 45" stroke="#E62429" stroke-width="6" fill="none" stroke-linecap="round"/>
                 <path d="M 68 50 Q 85 60 90 45" stroke="#E62429" stroke-width="6" fill="none" stroke-linecap="round"/>
-                <!-- Spiderman Legs -->
                 <path d="M 42 78 Q 35 95 30 100" stroke="#2B3784" stroke-width="7" fill="none" stroke-linecap="round"/>
                 <path d="M 58 78 Q 65 95 70 100" stroke="#2B3784" stroke-width="7" fill="none" stroke-linecap="round"/>
-                <!-- Spider Symbol -->
                 <path d="M 50 45 L 48 50 L 50 52 L 52 50 Z" fill="#2B3784"/>
                 <circle cx="46" cy="48" r="2" fill="#2B3784"/>
                 <circle cx="54" cy="48" r="2" fill="#2B3784"/>
@@ -399,7 +380,6 @@
             </svg>
         </div>
 
-        <!-- FOTO ARSHAKA -->
         <div class="photo-frame">
             <img src="https://i.postimg.cc/zXBgxCKr/IMG-20260717-WA0053.jpg" alt="Foto Arshaka">
         </div>
@@ -410,7 +390,7 @@
         <p style="font-size: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">TAHUN!</p>
 
         <div class="message">
-            <h2>️ Pesan untuk Spiderman Kecil 🕷️</h2>
+            <h2>🕷️ Pesan untuk Spiderman Kecil ️</h2>
             <p>
                 <strong>Dear Arshaka,</strong><br><br>
                 Selamat ulang tahun yang ke-5, jagoan kecil kami! 🎂<br>
@@ -424,16 +404,15 @@
             </p>
         </div>
 
-        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU 🎵</button>
+        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU </button>
 
         <div class="cbox-container">
             <h2 class="cbox-title">💌 Tulis Ucapan untuk Arshaka! 🕷️</h2>
             <p class="cbox-subtitle">Tulis namamu dan pesan untuk Arshaka di bawah ini!</p>
             
-            <!-- Cbox dengan Overlay untuk Hilangkan Tombol Upgrade -->
-            <div style="position: relative; width: 100%; height: 400px; overflow: hidden;">
-                <iframe src="https://www5.cbox.ws/box/?boxid=967537&boxtag=7PSCbo" width="100%" height="420" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="auto" style="position: absolute; top: 0; left: 0;"></iframe>
-                <div style="position: absolute; bottom: 0; left: 0; width: 100%; height: 40px; background: rgba(255,255,255,0.95); z-index: 10;"></div>
+            <!-- Cbox: Header Pink Disembunyikan, Hanya Kolom Nama & Pesan yang Muncul -->
+            <div class="cbox-wrapper">
+                <iframe src="https://www5.cbox.ws/box/?boxid=967537&boxtag=7PSCbo" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="no"></iframe>
             </div>
             
         </div>
@@ -511,7 +490,6 @@
             }
         }
         
-        // Initialize animations
         window.addEventListener('load', () => {
             setTimeout(createConfetti, 500);
             createBalloons();
