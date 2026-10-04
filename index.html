@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🕷️ Happy Birthday Arshaka! 🕷️</title>
+    <title>️ Happy Birthday Arshaka! 🕷️</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -211,28 +211,81 @@
             transform: translateY(-2px) scale(0.95); 
         }
         
-        .cbox-container { 
+        .wa-container { 
             background: rgba(255,255,255,0.95); 
             border-radius: 20px; 
-            padding: 20px; 
+            padding: 25px; 
             margin: 30px auto; 
-            max-width: 400px; 
+            max-width: 450px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
             border: 5px solid #FFD700;
             animation: slideUp 1.5s ease-out;
         }
-        .cbox-title { 
+        .wa-title { 
             color: #E62429; 
             text-align: center; 
             font-size: 22px; 
-            margin-bottom: 15px; 
+            margin-bottom: 10px; 
         }
-        .cbox-subtitle { 
+        .wa-subtitle { 
             text-align: center; 
             color: #333; 
             font-size: 14px; 
-            margin-bottom: 15px; 
+            margin-bottom: 20px; 
             font-family: Arial, sans-serif; 
+        }
+        
+        .wa-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .wa-input {
+            padding: 15px;
+            border: 3px solid #2B3784;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            transition: all 0.3s;
+        }
+        
+        .wa-input:focus {
+            outline: none;
+            border-color: #FFD700;
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
+        }
+        
+        .wa-button {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            padding: 18px 30px;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+            animation: waPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes waPulse {
+            0%, 100% { box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4); }
+            50% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.8), 0 0 40px rgba(37, 211, 102, 0.6); }
+        }
+        
+        .wa-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.6);
+        }
+        
+        .wa-button:active {
+            transform: translateY(-1px);
         }
         
         .balloon {
@@ -369,18 +422,23 @@
             </p>
         </div>
 
-        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU 🎵</button>
+        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU </button>
 
-        <div class="cbox-container">
-            <h2 class="cbox-title">💌 Tulis Ucapan untuk Arshaka! 🕷️</h2>
-            <p class="cbox-subtitle">Tulis namamu dan pesan untuk Arshaka di bawah ini!</p>
+        <!-- WHATSAPP FORM - GANTI NOMOR DI BAGIAN JAVASCRIPT -->
+        <div class="wa-container">
+            <h2 class="wa-title">💌 Kirim Ucapan untuk Arshaka! 🕷️</h2>
+            <p class="wa-subtitle">Isi nama dan ucapanmu, lalu kirim via WhatsApp!</p>
             
-            <!-- PERBAIKAN: Wrapper lebih tinggi (220px), iframe lebih tinggi (320px), dan digeser ke atas (-70px) -->
-            <!-- Ini akan memotong tepat di bawah header pink, sehingga hanya kolom input yang terlihat -->
-            <div style="position: relative; width: 100%; height: 220px; overflow: hidden; border-radius: 10px;">
-                <iframe src="https://www5.cbox.ws/box/?boxid=967537&boxtag=7PSCbo" width="100%" height="320" allowtransparency="yes" allow="autoplay" frameborder="0" marginheight="0" marginwidth="0" scrolling="no" style="position: absolute; top: -70px; left: 0;"></iframe>
+            <div class="wa-form">
+                <input type="text" id="namaPengirim" class="wa-input" placeholder="Nama Kamu..." maxlength="50">
+                <textarea id="pesanUcapan" class="wa-input" placeholder="Tulis ucapan untuk Arshaka di sini..." rows="4" maxlength="200"></textarea>
+                <button class="wa-button" onclick="kirimUcapan()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                        <path d="M20.52 3.449A11.93 11.93 0 0012.021 0C5.396 0 .022 5.373.022 11.999c0 2.106.548 4.16 1.592 5.976L0 24l6.198-1.622a11.93 11.93 0 005.823 1.501c6.625 0 12-5.373 12-11.999 0-3.21-1.249-6.227-3.499-8.431zM12.021 23.879c-1.819 0-3.604-.488-5.183-1.414l-.372-.219-3.859 1.01 1.031-3.762-.241-.384A9.874 9.874 0 011.643 12c0-5.731 4.66-10.391 10.378-10.391 2.767 0 5.367 1.077 7.322 3.032a10.314 10.314 0 013.033 7.359c0 5.731-4.661 10.391-10.355 10.391zm5.688-7.797c-.312-.156-1.842-.91-2.128-1.014-.287-.105-.496-.156-.704.156-.208.312-.805 1.014-.986 1.222-.182.208-.364.234-.676.078-.312-.156-1.314-.484-2.503-1.544-.927-.828-1.551-1.848-1.732-2.16-.182-.312-.02-.48.136-.636.14-.14.312-.364.468-.546.156-.182.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.704-1.698-.964-2.322-.253-.606-.51-.524-.704-.534l-.6-.012c-.208 0-.546.078-.83.39-.286.312-1.093 1.067-1.093 2.603 0 1.536 1.119 3.02 1.274 3.228.156.208 2.206 3.37 5.351 4.73 2.013.869 2.55.697 3.02.652.756-.072 1.842-.754 2.098-1.478.256-.724.256-1.344.18-1.47-.076-.126-.284-.2-.596-.356z"/>
+                    </svg>
+                    Kirim Ucapan
+                </button>
             </div>
-            
         </div>
     </div>
 
@@ -389,15 +447,45 @@
     </audio>
 
     <script>
+        // ⚠️ PENTING: GANTI NOMOR WhatsApp DI BAWAH INI!
+        // Format: 628xxxxxxxxxx (ganti 0 di depan dengan 62)
+        const nomorWhatsApp = "6285882865440"; // GANTI DENGAN NOMOR ANDA!
+        
         function playMusic() {
             const audio = document.getElementById('birthdaySong');
             audio.volume = 0.6;
             if (audio.paused) {
-                audio.play().catch(e => alert('🎵 Klik layar sekali lagi untuk memutar lagu! 🎵'));
+                audio.play().catch(e => alert(' Klik layar sekali lagi untuk memutar lagu! '));
                 createSparkles();
             } else {
                 audio.pause();
             }
+        }
+        
+        function kirimUcapan() {
+            const nama = document.getElementById('namaPengirim').value.trim();
+            const pesan = document.getElementById('pesanUcapan').value.trim();
+            
+            if (!nama || !pesan) {
+                alert('⚠️ Harap isi nama dan ucapan terlebih dahulu!');
+                return;
+            }
+            
+            // Format pesan WhatsApp
+            const teksPesan = `Halo! Saya *${nama}* ingin mengucapkan:\n\n${pesan}\n\n_Selamat ulang tahun Arshaka!_ 🎂🕷️`;
+            
+            // Encode pesan untuk URL
+            const urlWA = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(teksPesan)}`;
+            
+            // Buka WhatsApp
+            window.open(urlWA, '_blank');
+            
+            // Kosongkan form setelah kirim
+            document.getElementById('namaPengirim').value = '';
+            document.getElementById('pesanUcapan').value = '';
+            
+            // Efek confetti
+            createConfetti();
         }
         
         function createSparkles() {
