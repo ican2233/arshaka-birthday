@@ -363,6 +363,75 @@
             100% { transform: scale(3); opacity: 0; }
         }
         
+        /* CUSTOM MODAL - Pengganti alert() */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.active {
+            display: flex;
+        }
+        
+        .modal-box {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 5px solid #FFD700;
+            animation: modalPop 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes modalPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .modal-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+        
+        .modal-message {
+            color: #333;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-button {
+            background: linear-gradient(135deg, #E62429, #2B3784);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(230, 36, 41, 0.5);
+        }
+        
         @media (max-width: 600px) {
             .title { font-size: 28px; }
             .name { font-size: 32px; }
@@ -375,6 +444,15 @@
 <body>
     <div id="balloons"></div>
     <div id="webParticles"></div>
+
+    <!-- CUSTOM MODAL -->
+    <div class="modal-overlay" id="customModal">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon">⚠️</div>
+            <div class="modal-message" id="modalMessage">Pesan di sini</div>
+            <button class="modal-button" onclick="tutupModal()">Oke</button>
+        </div>
+    </div>
 
     <div class="container">
         <div class="spiderman-hero">
@@ -422,9 +500,8 @@
             </p>
         </div>
 
-        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU </button>
+        <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU 🎵</button>
 
-        <!-- WHATSAPP FORM - GANTI NOMOR DI BAGIAN JAVASCRIPT -->
         <div class="wa-container">
             <h2 class="wa-title">💌 Ucapan Untuk Arshaka 🕷️</h2>
             <p class="wa-subtitle">Isi nama dan ucapanmu, lalu kirim via WhatsApp</p>
@@ -447,15 +524,32 @@
     </audio>
 
     <script>
-        // ⚠️ PENTING: GANTI NOMOR WhatsApp DI BAWAH INI!
-        // Format: 628xxxxxxxxxx (ganti 0 di depan dengan 62)
-        const nomorWhatsApp = "6285882865440"; // GANTI DENGAN NOMOR ANDA!
+        // ⚠️ NOMOR WhatsApp sudah diset
+        const nomorWhatsApp = "6285882865440";
+        
+        // FUNGSI CUSTOM MODAL
+        function tampilkanModal(pesan, ikon = '️') {
+            document.getElementById('modalMessage').textContent = pesan;
+            document.getElementById('modalIcon').textContent = ikon;
+            document.getElementById('customModal').classList.add('active');
+        }
+        
+        function tutupModal() {
+            document.getElementById('customModal').classList.remove('active');
+        }
+        
+        // Tutup modal saat klik di luar box
+        document.getElementById('customModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                tutupModal();
+            }
+        });
         
         function playMusic() {
             const audio = document.getElementById('birthdaySong');
             audio.volume = 0.6;
             if (audio.paused) {
-                audio.play().catch(e => alert(' Klik layar sekali lagi untuk memutar lagu! '));
+                audio.play().catch(e => tampilkanModal('🎵 Klik layar sekali lagi untuk memutar lagu!', '🎵'));
                 createSparkles();
             } else {
                 audio.pause();
@@ -467,24 +561,19 @@
             const pesan = document.getElementById('pesanUcapan').value.trim();
             
             if (!nama || !pesan) {
-                alert('⚠️ Harap isi nama dan ucapan terlebih dahulu!');
+                tampilkanModal('Harap isi nama dan ucapan terlebih dahulu!', '⚠️');
                 return;
             }
             
-            // Format pesan WhatsApp
-            const teksPesan = `Halo! Saya *${nama}* ingin mengucapkan:\n\n${pesan}\n\n_Selamat ulang tahun Arshaka!_ 🎂🕷️`;
-            
-            // Encode pesan untuk URL
+            const teksPesan = `Halo! Saya *${nama}* ingin mengucapkan:\n\n${pesan}\n\n_Selamat ulang tahun Arshaka!_ 🕷️`;
             const urlWA = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(teksPesan)}`;
             
-            // Buka WhatsApp
             window.open(urlWA, '_blank');
             
-            // Kosongkan form setelah kirim
             document.getElementById('namaPengirim').value = '';
             document.getElementById('pesanUcapan').value = '';
             
-            // Efek confetti
+            tampilkanModal('Terima kasih! Ucapanmu sudah siap dikirim via WhatsApp! ', '🎉');
             createConfetti();
         }
         
