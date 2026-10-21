@@ -259,7 +259,6 @@
             padding: 15px 20px;
             font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease;
             position: relative;
         }
 
@@ -317,7 +316,6 @@
             padding: 20px;
         }
         
-        /* Modal Custom yang Elegan & Beranimasi */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -368,39 +366,18 @@
             text-align: center;
             margin-bottom: 20px;
             outline: none;
-            transition: border-color 0.3s;
-        }
-        .modal-input:focus { border-color: #FF1493; }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
         }
 
+        .modal-buttons { display: flex; gap: 10px; justify-content: center; }
         .modal-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border-radius: 50px;
-            font-size: 15px;
-            font-weight: bold;
-            cursor: pointer;
-            border: none;
-            transition: all 0.2s;
+            flex: 1; padding: 12px 20px; border-radius: 50px;
+            font-size: 15px; font-weight: bold; cursor: pointer; border: none;
         }
-
-        .modal-btn-cancel {
-            background: #e0e0e0;
-            color: #555;
-        }
-        .modal-btn-cancel:hover { background: #d0d0d0; }
-
+        .modal-btn-cancel { background: #e0e0e0; color: #555; }
         .modal-btn-confirm {
             background: linear-gradient(135deg, #FF1493, #00BFFF);
             color: white;
-            box-shadow: 0 5px 15px rgba(255,20,147,0.4);
         }
-        .modal-btn-confirm:hover { transform: translateY(-2px); }
 
         @media (max-width: 600px) {
             .title { font-size: 32px; }
@@ -414,14 +391,12 @@
     <div id="balloons"></div>
     <div id="gamePieces"></div>
 
-    <!-- Custom Modal / Kotak Dialog Elegan -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">⚠️</div>
             <div class="modal-title" id="modalTitle">Perhatian</div>
             <div class="modal-message" id="modalMessage">Pesan di sini</div>
             
-            <!-- Tempat Input Khusus PIN Admin -->
             <div id="modalInputContainer" style="display: none;">
                 <input type="password" id="modalInputPin" class="modal-input" placeholder="Masukkan PIN Admin..." maxlength="10">
             </div>
@@ -525,71 +500,71 @@
         <source src="https://files.catbox.moe/sav8jr.mp3" type="audio/mpeg">
     </audio>
 
-    <script>
-        const ADMIN_PIN = "tksteam23"; // Ganti PIN Admin sesuai keinginan Anda
+    <!-- Firebase SDK (Modular) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, push, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Konfigurasi Firebase Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyBsoSQDYibL0W32LQDwr2pad_IrQ9Dux8E",
+            authDomain: "arshakabirthday-e9f12.firebaseapp.com",
+            databaseURL: "https://arshakabirthday-e9f12-default-rtdb.firebaseio.com",
+            projectId: "arshakabirthday-e9f12",
+            storageBucket: "arshakabirthday-e9f12.firebasestorage.app",
+            messagingSenderId: "101207680099",
+            appId: "1:101207680099:web:6361187dcbc0aaaa8b4456"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        const ADMIN_PIN = "tksteam23"; 
         let currentCallback = null;
 
         document.addEventListener('DOMContentLoaded', () => {
-            muatUcapan();
+            muatUcapanRealtime();
             createBalloons();
             createGamePieces();
         });
 
-        // Fungsi Menampilkan Modal Custom Elegan (Pengganti alert/prompt)
-        function tampilkanModalCustom({ judul = "Informasi", pesan, ikon = "✨", pakaiInput = false, teksTombolBatal = "Batal", teksTombolOk = "Oke" }, callback) {
-            document.getElementById('modalTitle').textContent = judul;
-            document.getElementById('modalMessage').textContent = pesan;
-            document.getElementById('modalIcon').textContent = ikon;
-            
-            const inputContainer = document.getElementById('modalInputContainer');
-            const inputPin = document.getElementById('modalInputPin');
-            const btnBatal = document.getElementById('modalBtnCancel');
-            const btnOk = document.getElementById('modalBtnOk');
+        // Ambil data secara Realtime dari Firebase Database
+        function muatUcapanRealtime() {
+            const container = document.getElementById('daftarUcapan');
+            const wishesRef = ref(db, 'arshakaWishes');
 
-            btnOk.textContent = teksTombolOk;
+            onValue(wishesRef, (snapshot) => {
+                const data = snapshot.val();
+                container.innerHTML = '';
 
-            if (pakaiInput) {
-                inputContainer.style.display = "block";
-                inputPin.value = "";
-                btnBatal.style.display = "inline-block";
-                setTimeout(() => inputPin.focus(), 100);
-            } else {
-                inputContainer.style.display = "none";
-                if (teksTombolBatal === "none") {
-                    btnBatal.style.display = "none";
-                } else {
-                    btnBatal.style.display = "inline-block";
-                    btnBatal.textContent = teksTombolBatal;
+                if (!data) {
+                    container.innerHTML = `<div class="empty-wishes">Belum ada ucapan nih. Jadilah yang pertama mengirimkan ucapan untuk Arshaka! 🚀</div>`;
+                    return;
                 }
-            }
 
-            document.getElementById('customModal').classList.add('active');
-            currentCallback = callback;
-        }
+                const daftarWishes = Object.keys(data).map(key => ({
+                    firebaseId: key,
+                    ...data[key]
+                })).reverse();
 
-        function tutupModal(isConfirm) {
-            document.getElementById('customModal').classList.remove('active');
-            if (currentCallback) {
-                const inputVal = document.getElementById('modalInputPin').value;
-                currentCallback(isConfirm, inputVal);
-                currentCallback = null;
-            }
-        }
-        
-        function playMusic() {
-            const audio = document.getElementById('birthdaySong');
-            audio.volume = 0.6;
-            if (audio.paused) {
-                audio.play().catch(e => {
-                    tampilkanModalCustom({ judul: "Putar Musik", pesan: "Klik sekali lagi untuk memutar lagu ya!", ikon: "🎵", teksTombolBatal: "none" });
+                daftarWishes.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'wish-card';
+                    card.innerHTML = `
+                        <button class="delete-btn" onclick="konfirmasiHapus('${item.firebaseId}')" title="Hapus (Khusus Admin)">🗑️</button>
+                        <div class="wish-card-header">
+                            <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
+                            <span class="wish-card-time">${item.waktu}</span>
+                        </div>
+                        <div class="wish-card-text">${escapeHtml(item.pesan)}</div>
+                    `;
+                    container.appendChild(card);
                 });
-                createSparkles();
-            } else {
-                audio.pause();
-            }
+            });
         }
-        
-        function kirimUcapanWeb() {
+
+        // Kirim Ucapan ke Firebase Database
+        window.kirimUcapanWeb = function() {
             const nama = document.getElementById('namaPengirim').value.trim();
             const pesan = document.getElementById('pesanUcapan').value.trim();
             
@@ -602,52 +577,25 @@
                 day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
             });
 
-            const dataUcapanBaru = {
-                id: Date.now(),
+            const wishesRef = ref(db, 'arshakaWishes');
+            const newWishRef = push(wishesRef);
+
+            set(newWishRef, {
                 nama: nama,
                 pesan: pesan,
                 waktu: waktuSekarang
-            };
-
-            let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
-            daftarWishes.unshift(dataUcapanBaru);
-            localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
-            
-            document.getElementById('namaPengirim').value = '';
-            document.getElementById('pesanUcapan').value = '';
-            
-            muatUcapan();
-            tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
-            createConfetti();
-        }
-
-        function muatUcapan() {
-            const container = document.getElementById('daftarUcapan');
-            let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
-            
-            if (daftarWishes.length === 0) {
-                container.innerHTML = `<div class="empty-wishes">Belum ada ucapan nih. Jadilah yang pertama mengirimkan ucapan untuk Arshaka! 🚀</div>`;
-                return;
-            }
-            
-            container.innerHTML = '';
-            daftarWishes.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'wish-card';
-                card.innerHTML = `
-                    <button class="delete-btn" onclick="konfirmasiHapus(${item.id})" title="Hapus (Khusus Admin)">🗑️</button>
-                    <div class="wish-card-header">
-                        <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
-                        <span class="wish-card-time">${item.waktu}</span>
-                    </div>
-                    <div class="wish-card-text">${escapeHtml(item.pesan)}</div>
-                `;
-                container.appendChild(card);
+            }).then(() => {
+                document.getElementById('namaPengirim').value = '';
+                document.getElementById('pesanUcapan').value = '';
+                tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
+                createConfetti();
+            }).catch((error) => {
+                tampilkanModalCustom({ judul: "Gagal", pesan: "Gagal mengirim ucapan. Periksa koneksi internet.", ikon: "❌", teksTombolBatal: "none" });
             });
         }
 
-        // Fungsi Konfirmasi Hapus dengan Kotak Dialog Kustom Beranimasi
-        function konfirmasiHapus(id) {
+        // Fungsi Hapus dari Firebase
+        window.konfirmasiHapus = function(firebaseId) {
             tampilkanModalCustom({
                 judul: "Keamanan Admin",
                 pesan: "Masukkan PIN Admin untuk menghapus ucapan ini:",
@@ -657,16 +605,69 @@
             }, (isConfirm, pinInput) => {
                 if (isConfirm) {
                     if (pinInput === ADMIN_PIN) {
-                        let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
-                        daftarWishes = daftarWishes.filter(item => item.id !== id);
-                        localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
-                        muatUcapan();
-                        tampilkanModalCustom({ judul: "Berhasil", pesan: "Ucapan berhasil dihapus!", ikon: "🗑️", teksTombolBatal: "none" });
+                        const wishItemRef = ref(db, 'arshakaWishes/' + firebaseId);
+                        remove(wishItemRef).then(() => {
+                            tampilkanModalCustom({ judul: "Berhasil", pesan: "Ucapan berhasil dihapus!", ikon: "🗑️", teksTombolBatal: "none" });
+                        });
                     } else {
                         tampilkanModalCustom({ judul: "Akses Ditolak", pesan: "PIN Admin salah! Anda tidak berhak menghapus ucapan.", ikon: "❌", teksTombolBatal: "none" });
                     }
                 }
             });
+        }
+
+        // Fungsi Modal Custom
+        window.tampilkanModalCustom = function(options, callback) {
+            document.getElementById('modalTitle').textContent = options.judul;
+            document.getElementById('modalMessage').textContent = options.pesan;
+            document.getElementById('modalIcon').textContent = options.ikon;
+            
+            const inputContainer = document.getElementById('modalInputContainer');
+            const inputPin = document.getElementById('modalInputPin');
+            const btnBatal = document.getElementById('modalBtnCancel');
+            const btnOk = document.getElementById('modalBtnOk');
+
+            btnOk.textContent = options.teksTombolOk || "Oke";
+
+            if (options.pakaiInput) {
+                inputContainer.style.display = "block";
+                inputPin.value = "";
+                btnBatal.style.display = "inline-block";
+                setTimeout(() => inputPin.focus(), 100);
+            } else {
+                inputContainer.style.display = "none";
+                if (options.teksTombolBatal === "none") {
+                    btnBatal.style.display = "none";
+                } else {
+                    btnBatal.style.display = "inline-block";
+                    btnBatal.textContent = options.teksTombolBatal;
+                }
+            }
+
+            document.getElementById('customModal').classList.add('active');
+            currentCallback = callback;
+        }
+
+        window.tutupModal = function(isConfirm) {
+            document.getElementById('customModal').classList.remove('active');
+            if (currentCallback) {
+                const inputVal = document.getElementById('modalInputPin').value;
+                currentCallback(isConfirm, inputVal);
+                currentCallback = null;
+            }
+        }
+
+        window.playMusic = function() {
+            const audio = document.getElementById('birthdaySong');
+            audio.volume = 0.6;
+            if (audio.paused) {
+                audio.play().catch(e => {
+                    tampilkanModalCustom({ judul: "Putar Musik", pesan: "Klik sekali lagi untuk memutar lagu ya!", ikon: "🎵", teksTombolBatal: "none" });
+                });
+                createSparkles();
+            } else {
+                audio.pause();
+            }
         }
 
         function escapeHtml(text) {
