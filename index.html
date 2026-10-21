@@ -300,9 +300,7 @@
             transition: background 0.2s;
         }
 
-        .delete-btn:hover {
-            background: #CC0000;
-        }
+        .delete-btn:hover { background: #CC0000; }
 
         .wish-card-text {
             color: #444;
@@ -319,28 +317,90 @@
             padding: 20px;
         }
         
+        /* Modal Custom yang Elegan & Beranimasi */
         .modal-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
             z-index: 10000;
             justify-content: center;
             align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        .modal-overlay.active { display: flex; }
+        
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+        
         .modal-box {
-            background: white; border-radius: 20px; padding: 30px;
-            max-width: 350px; width: 90%; text-align: center;
-            border: 5px solid #FFD700; color: #333; font-family: Arial, sans-serif;
+            background: #ffffff;
+            border-radius: 25px;
+            padding: 30px;
+            max-width: 380px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 30px rgba(255,215,0,0.5);
+            border: 6px solid #FFD700;
+            color: #333;
+            font-family: Arial, sans-serif;
+            transform: scale(0.7) translateY(30px);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .modal-icon { font-size: 50px; margin-bottom: 15px; }
-        .modal-message { font-size: 16px; margin-bottom: 20px; line-height: 1.5; }
-        .modal-button {
+        
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+        
+        .modal-icon { font-size: 45px; margin-bottom: 12px; }
+        .modal-title { font-size: 20px; font-weight: bold; color: #FF1493; margin-bottom: 8px; }
+        .modal-message { font-size: 15px; margin-bottom: 20px; line-height: 1.5; color: #555; }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 3px solid #00BFFF;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .modal-input:focus { border-color: #FF1493; }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background: #e0e0e0;
+            color: #555;
+        }
+        .modal-btn-cancel:hover { background: #d0d0d0; }
+
+        .modal-btn-confirm {
             background: linear-gradient(135deg, #FF1493, #00BFFF);
-            color: white; border: none; padding: 12px 30px;
-            border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255,20,147,0.4);
         }
+        .modal-btn-confirm:hover { transform: translateY(-2px); }
 
         @media (max-width: 600px) {
             .title { font-size: 32px; }
@@ -354,11 +414,22 @@
     <div id="balloons"></div>
     <div id="gamePieces"></div>
 
+    <!-- Custom Modal / Kotak Dialog Elegan -->
     <div class="modal-overlay" id="customModal">
         <div class="modal-box">
             <div class="modal-icon" id="modalIcon">⚠️</div>
+            <div class="modal-title" id="modalTitle">Perhatian</div>
             <div class="modal-message" id="modalMessage">Pesan di sini</div>
-            <button class="modal-button" onclick="tutupModal()">Oke</button>
+            
+            <!-- Tempat Input Khusus PIN Admin -->
+            <div id="modalInputContainer" style="display: none;">
+                <input type="password" id="modalInputPin" class="modal-input" placeholder="Masukkan PIN Admin..." maxlength="10">
+            </div>
+
+            <div class="modal-buttons">
+                <button class="modal-btn modal-btn-cancel" id="modalBtnCancel" onclick="tutupModal(false)">Batal</button>
+                <button class="modal-btn modal-btn-confirm" id="modalBtnOk" onclick="tutupModal(true)">Oke</button>
+            </div>
         </div>
     </div>
 
@@ -455,8 +526,8 @@
     </audio>
 
     <script>
-        // Set PIN khusus Admin Anda di sini
-        const ADMIN_PIN = "230793";
+        const ADMIN_PIN = "1234"; // Ganti PIN Admin sesuai keinginan Anda
+        let currentCallback = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             muatUcapan();
@@ -464,25 +535,54 @@
             createGamePieces();
         });
 
-        function tampilkanModal(pesan, ikon = '⚠️') {
+        // Fungsi Menampilkan Modal Custom Elegan (Pengganti alert/prompt)
+        function tampilkanModalCustom({ judul = "Informasi", pesan, ikon = "✨", pakaiInput = false, teksTombolBatal = "Batal", teksTombolOk = "Oke" }, callback) {
+            document.getElementById('modalTitle').textContent = judul;
             document.getElementById('modalMessage').textContent = pesan;
             document.getElementById('modalIcon').textContent = ikon;
+            
+            const inputContainer = document.getElementById('modalInputContainer');
+            const inputPin = document.getElementById('modalInputPin');
+            const btnBatal = document.getElementById('modalBtnCancel');
+            const btnOk = document.getElementById('modalBtnOk');
+
+            btnOk.textContent = teksTombolOk;
+
+            if (pakaiInput) {
+                inputContainer.style.display = "block";
+                inputPin.value = "";
+                btnBatal.style.display = "inline-block";
+                setTimeout(() => inputPin.focus(), 100);
+            } else {
+                inputContainer.style.display = "none";
+                if (teksTombolBatal === "none") {
+                    btnBatal.style.display = "none";
+                } else {
+                    btnBatal.style.display = "inline-block";
+                    btnBatal.textContent = teksTombolBatal;
+                }
+            }
+
             document.getElementById('customModal').classList.add('active');
+            currentCallback = callback;
         }
-        
-        function tutupModal() {
+
+        function tutupModal(isConfirm) {
             document.getElementById('customModal').classList.remove('active');
+            if (currentCallback) {
+                const inputVal = document.getElementById('modalInputPin').value;
+                currentCallback(isConfirm, inputVal);
+                currentCallback = null;
+            }
         }
-        
-        document.getElementById('customModal').addEventListener('click', function(e) {
-            if (e.target === this) { tutupModal(); }
-        });
         
         function playMusic() {
             const audio = document.getElementById('birthdaySong');
             audio.volume = 0.6;
             if (audio.paused) {
-                audio.play().catch(e => tampilkanModal('🎵 Klik layar sekali lagi untuk memutar lagu!', '🎵'));
+                audio.play().catch(e => {
+                    tampilkanModalCustom({ judul: "Putar Musik", pesan: "Klik sekali lagi untuk memutar lagu ya!", ikon: "🎵", teksTombolBatal: "none" });
+                });
                 createSparkles();
             } else {
                 audio.pause();
@@ -494,7 +594,7 @@
             const pesan = document.getElementById('pesanUcapan').value.trim();
             
             if (!nama || !pesan) {
-                tampilkanModal('Harap isi nama dan ucapan terlebih dahulu ya!', '⚠️');
+                tampilkanModalCustom({ judul: "Peringatan", pesan: "Harap isi nama dan ucapan terlebih dahulu ya!", ikon: "⚠️", teksTombolBatal: "none" });
                 return;
             }
             
@@ -503,7 +603,7 @@
             });
 
             const dataUcapanBaru = {
-                id: Date.now(), // Unique ID untuk hapus
+                id: Date.now(),
                 nama: nama,
                 pesan: pesan,
                 waktu: waktuSekarang
@@ -517,7 +617,7 @@
             document.getElementById('pesanUcapan').value = '';
             
             muatUcapan();
-            tampilkanModal('Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉', '🎉');
+            tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
             createConfetti();
         }
 
@@ -535,7 +635,7 @@
                 const card = document.createElement('div');
                 card.className = 'wish-card';
                 card.innerHTML = `
-                    <button class="delete-btn" onclick="hapusUcapan(${item.id})" title="Hapus (Khusus Admin)">🗑️</button>
+                    <button class="delete-btn" onclick="konfirmasiHapus(${item.id})" title="Hapus (Khusus Admin)">🗑️</button>
                     <div class="wish-card-header">
                         <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
                         <span class="wish-card-time">${item.waktu}</span>
@@ -546,22 +646,27 @@
             });
         }
 
-        // Fungsi khusus Admin untuk menghapus ucapan dengan PIN
-        function hapusUcapan(id) {
-            const inputPIN = prompt("Masukkan PIN Admin untuk menghapus ucapan ini:");
-            
-            if (inputPIN === null) return; // Batal klik
-
-            if (inputPIN === ADMIN_PIN) {
-                let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
-                daftarWishes = daftarWishes.filter(item => item.id !== id);
-                localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
-                
-                muatUcapan();
-                tampilkanModal('Ucapan berhasil dihapus!', '🗑️');
-            } else {
-                tampilkanModal('PIN Admin salah! Anda tidak berhak menghapus ucapan.', '❌');
-            }
+        // Fungsi Konfirmasi Hapus dengan Kotak Dialog Kustom Beranimasi
+        function konfirmasiHapus(id) {
+            tampilkanModalCustom({
+                judul: "Keamanan Admin",
+                pesan: "Masukkan PIN Admin untuk menghapus ucapan ini:",
+                ikon: "🔐",
+                pakaiInput: true,
+                teksTombolOk: "Hapus"
+            }, (isConfirm, pinInput) => {
+                if (isConfirm) {
+                    if (pinInput === ADMIN_PIN) {
+                        let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
+                        daftarWishes = daftarWishes.filter(item => item.id !== id);
+                        localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
+                        muatUcapan();
+                        tampilkanModalCustom({ judul: "Berhasil", pesan: "Ucapan berhasil dihapus!", ikon: "🗑️", teksTombolBatal: "none" });
+                    } else {
+                        tampilkanModalCustom({ judul: "Akses Ditolak", pesan: "PIN Admin salah! Anda tidak berhak menghapus ucapan.", ikon: "❌", teksTombolBatal: "none" });
+                    }
+                }
+            });
         }
 
         function escapeHtml(text) {
