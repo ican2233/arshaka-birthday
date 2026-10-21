@@ -213,6 +213,7 @@
             font-family: Arial, sans-serif;
             transition: all 0.3s;
             color: #333;
+            background: #fff;
         }
         
         .wish-input:focus {
@@ -244,7 +245,7 @@
         }
 
         .wishes-list-box {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
@@ -306,6 +307,19 @@
             font-size: 15px;
             line-height: 1.5;
             word-break: break-word;
+        }
+
+        .wish-card-img {
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .wish-card-img img {
+            max-width: 100%;
+            max-height: 220px;
+            border-radius: 12px;
+            border: 2px solid #00BFFF;
+            object-fit: cover;
         }
 
         .empty-wishes {
@@ -483,6 +497,12 @@
             <div class="wish-form">
                 <input type="text" id="namaPengirim" class="wish-input" placeholder="Isi Nama Kamu Disini..." maxlength="50">
                 <textarea id="pesanUcapan" class="wish-input" placeholder="Tulis Ucapan & Doa Untuk Arshaka Disini..." rows="3" maxlength="200"></textarea>
+                
+                <div style="text-align: left;">
+                    <label style="color: #333; font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block;">📷 Tambahkan Foto (Opsional):</label>
+                    <input type="file" id="fotoPengirim" accept="image/*" class="wish-input" style="padding: 10px; cursor: pointer;">
+                </div>
+
                 <button class="submit-btn" onclick="kirimUcapanWeb()">
                     ✨ Kirim Ucapan Kalian
                 </button>
@@ -550,6 +570,13 @@
                 daftarWishes.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'wish-card';
+                    
+                    const fotoHTML = item.foto 
+                        ? `<div class="wish-card-img">
+                             <img src="${item.foto}" alt="Foto Ucapan">
+                           </div>` 
+                        : '';
+
                     card.innerHTML = `
                         <button class="delete-btn" onclick="konfirmasiHapus('${item.firebaseId}')" title="Hapus (Khusus Admin)">🗑️</button>
                         <div class="wish-card-header">
@@ -557,16 +584,18 @@
                             <span class="wish-card-time">${item.waktu}</span>
                         </div>
                         <div class="wish-card-text">${escapeHtml(item.pesan)}</div>
+                        ${fotoHTML}
                     `;
                     container.appendChild(card);
                 });
             });
         }
 
-        // Kirim Ucapan ke Firebase Database
-        window.kirimUcapanWeb = function() {
+        // Kirim Ucapan & Foto ke Firebase Database
+        window.kirimUcapanWeb = async function() {
             const nama = document.getElementById('namaPengirim').value.trim();
             const pesan = document.getElementById('pesanUcapan').value.trim();
+            const fotoInput = document.getElementById('fotoPengirim');
             
             if (!nama || !pesan) {
                 tampilkanModalCustom({ judul: "Peringatan", pesan: "Harap isi nama dan ucapan terlebih dahulu ya!", ikon: "⚠️", teksTombolBatal: "none" });
@@ -577,17 +606,36 @@
                 day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
             });
 
+            let fotoUrl = "";
+
+            if (fotoInput.files && fotoInput.files[0]) {
+                const file = fotoInput.files[0];
+                
+                if (file.size > 2 * 1024 * 1024) {
+                    tampilkanModalCustom({ judul: "Ukuran Foto Terlalu Besar", pesan: "Maksimal ukuran foto adalah 2MB ya!", ikon: "⚠️", teksTombolBatal: "none" });
+                    return;
+                }
+
+                fotoUrl = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => resolve(reader.result);
+                    reader.readAsDataURL(file);
+                });
+            }
+
             const wishesRef = ref(db, 'arshakaWishes');
             const newWishRef = push(wishesRef);
 
             set(newWishRef, {
                 nama: nama,
                 pesan: pesan,
-                waktu: waktuSekarang
+                waktu: waktuSekarang,
+                foto: fotoUrl
             }).then(() => {
                 document.getElementById('namaPengirim').value = '';
                 document.getElementById('pesanUcapan').value = '';
-                tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
+                fotoInput.value = '';
+                tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapan & fotomu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
                 createConfetti();
             }).catch((error) => {
                 tampilkanModalCustom({ judul: "Gagal", pesan: "Gagal mengirim ucapan. Periksa koneksi internet.", ikon: "❌", teksTombolBatal: "none" });
