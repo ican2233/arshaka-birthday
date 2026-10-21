@@ -299,27 +299,36 @@
         .wish-card-time {
             font-size: 11px;
             color: #888;
-            margin-right: 28px;
+            margin-right: 60px;
         }
 
-        .delete-btn {
+        .action-btns {
             position: absolute;
             top: 10px;
             right: 10px;
-            background: #FF4D4D;
-            color: white;
+            display: flex;
+            gap: 5px;
+        }
+
+        .edit-btn, .delete-btn {
             border: none;
             border-radius: 50%;
             width: 26px;
             height: 26px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            color: white;
+            transition: transform 0.2s;
         }
 
-        .delete-btn:hover { background: #CC0000; }
+        .edit-btn { background: #00BFFF; }
+        .edit-btn:hover { background: #0099cc; transform: scale(1.1); }
+
+        .delete-btn { background: #FF4D4D; }
+        .delete-btn:hover { background: #CC0000; transform: scale(1.1); }
 
         .wish-card-text {
             color: #444;
@@ -427,7 +436,7 @@
             <div class="modal-message" id="modalMessage">Pesan di sini</div>
             
             <div id="modalInputContainer" style="display: none;">
-                <input type="password" id="modalInputPin" class="modal-input" placeholder="Masukkan PIN Admin..." maxlength="10">
+                <input type="password" id="modalInputPin" class="modal-input" placeholder="Masukkan PIN..." maxlength="10">
             </div>
 
             <div class="modal-buttons">
@@ -538,9 +547,8 @@
     <!-- Firebase SDK (Modular) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, push, set, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, push, set, update, remove, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // Konfigurasi Firebase Anda
         const firebaseConfig = {
             apiKey: "AIzaSyBsoSQDYibL0W32LQDwr2pad_IrQ9Dux8E",
             authDomain: "arshakabirthday-e9f12.firebaseapp.com",
@@ -556,6 +564,7 @@
         
         const ADMIN_PIN = "tksteam23"; 
         let currentCallback = null;
+        let dataWishesCache = {};
 
         document.addEventListener('DOMContentLoaded', () => {
             muatUcapanRealtime();
@@ -568,8 +577,11 @@
             const container = document.getElementById('daftarUcapan');
             const wishesRef = ref(db, 'arshakaWishes');
 
+            let myWishes = JSON.parse(localStorage.getItem('myArshakaWishes')) || [];
+
             onValue(wishesRef, (snapshot) => {
                 const data = snapshot.val();
+                dataWishesCache = data || {};
                 container.innerHTML = '';
 
                 if (!data) {
@@ -592,8 +604,17 @@
                            </div>` 
                         : '';
 
+                    // Tombol edit HANYA MUNCUL DI HP PENGIRIM TERSEBUT (tanpa pin)
+                    const isMyWish = myWishes.includes(item.firebaseId);
+                    const editBtnHTML = isMyWish 
+                        ? `<button class="edit-btn" onclick="bukaFormEdit('${item.firebaseId}')" title="Edit Ucapan Kamu">✏️</button>` 
+                        : '';
+
                     card.innerHTML = `
-                        <button class="delete-btn" onclick="konfirmasiHapus('${item.firebaseId}')" title="Hapus (Khusus Admin)">🗑️</button>
+                        <div class="action-btns">
+                            ${editBtnHTML}
+                            <button class="delete-btn" onclick="konfirmasiHapus('${item.firebaseId}')" title="Hapus (Khusus Admin)">🗑️</button>
+                        </div>
                         <div class="wish-card-header">
                             <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
                             <span class="wish-card-time">${item.waktu}</span>
@@ -640,6 +661,7 @@
 
             const wishesRef = ref(db, 'arshakaWishes');
             const newWishRef = push(wishesRef);
+            const newWishId = newWishRef.key;
 
             set(newWishRef, {
                 nama: nama,
@@ -647,17 +669,69 @@
                 waktu: waktuSekarang,
                 foto: fotoUrl
             }).then(() => {
+                let myWishes = JSON.parse(localStorage.getItem('myArshakaWishes')) || [];
+                myWishes.push(newWishId);
+                localStorage.setItem('myArshakaWishes', JSON.stringify(myWishes));
+
                 document.getElementById('namaPengirim').value = '';
                 document.getElementById('pesanUcapan').value = '';
                 fotoInput.value = '';
-                tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapan & fotomu berhasil ditambahkan ke papan! 🎉", ikon: "🎉", teksTombolBatal: "none" });
+                tampilkanModalCustom({ judul: "Berhasil!", pesan: "Yeay! Ucapan & fotomu berhasil ditambahkan ke papan! 🎉 Kamu bisa mengedit ucapannya kapan saja lewat HP ini.", ikon: "🎉", teksTombolBatal: "none" });
                 createConfetti();
+                muatUcapanRealtime();
             }).catch((error) => {
                 tampilkanModalCustom({ judul: "Gagal", pesan: "Gagal mengirim ucapan. Periksa koneksi internet.", ikon: "❌", teksTombolBatal: "none" });
             });
         }
 
-        // Fungsi Hapus dari Firebase
+        // Fungsi Buka Form Edit Khusus Pemilik Ucapan (Tanpa PIN)
+        window.bukaFormEdit = function(firebaseId) {
+            const item = dataWishesCache[firebaseId];
+            if (!item) return;
+
+            document.getElementById('modalTitle').textContent = "Edit Ucapan Kamu";
+            document.getElementById('modalMessage').innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px; text-align:left;">
+                    <label style="font-size:12px; font-weight:bold; color:#FF1493;">Nama:</label>
+                    <input type="text" id="editNamaInput" class="modal-input" style="margin-bottom:0;" value="${escapeHtml(item.nama)}">
+                    <label style="font-size:12px; font-weight:bold; color:#FF1493;">Ucapan & Doa:</label>
+                    <textarea id="editPesanInput" class="modal-input" style="height:80px; margin-bottom:0; text-align:left; resize:vertical;">${escapeHtml(item.pesan)}</textarea>
+                </div>
+            `;
+            document.getElementById('modalIcon').textContent = "✏️";
+            document.getElementById('modalInputContainer').style.display = "none";
+            
+            const btnBatal = document.getElementById('modalBtnCancel');
+            const btnOk = document.getElementById('modalBtnOk');
+
+            btnBatal.style.display = "inline-block";
+            btnBatal.textContent = "Batal";
+            btnOk.textContent = "Simpan Perubahan";
+
+            document.getElementById('customModal').classList.add('active');
+
+            currentCallback = (isConfirm) => {
+                if (isConfirm) {
+                    const namaBaru = document.getElementById('editNamaInput').value.trim();
+                    const pesanBaru = document.getElementById('editPesanInput').value.trim();
+
+                    if (!namaBaru || !pesanBaru) {
+                        tampilkanModalCustom({ judul: "Gagal", pesan: "Nama dan Ucapan tidak boleh kosong!", ikon: "⚠️", teksTombolBatal: "none" });
+                        return;
+                    }
+
+                    const wishItemRef = ref(db, 'arshakaWishes/' + firebaseId);
+                    update(wishItemRef, {
+                        nama: namaBaru,
+                        pesan: pesanBaru
+                    }).then(() => {
+                        tampilkanModalCustom({ judul: "Berhasil", pesan: "Ucapannya berhasil diperbarui!", ikon: "✨", teksTombolBatal: "none" });
+                    });
+                }
+            };
+        }
+
+        // Fungsi Hapus Khusus Admin (Memakai PIN Admin)
         window.konfirmasiHapus = function(firebaseId) {
             tampilkanModalCustom({
                 judul: "Keamanan Admin",
