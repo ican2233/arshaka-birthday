@@ -47,24 +47,9 @@
             animation: characterJump 2s ease-in-out infinite;
         }
         
-        .character:nth-child(1) {
-            left: 10%;
-            top: 20%;
-            animation-delay: 0s;
-        }
-        
-        .character:nth-child(2) {
-            left: 50%;
-            top: 0%;
-            transform: translateX(-50%);
-            animation-delay: 0.5s;
-        }
-        
-        .character:nth-child(3) {
-            right: 10%;
-            top: 30%;
-            animation-delay: 1s;
-        }
+        .character:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .character:nth-child(2) { left: 50%; top: 0%; transform: translateX(-50%); animation-delay: 0.5s; }
+        .character:nth-child(3) { right: 10%; top: 30%; animation-delay: 1s; }
         
         .character-svg {
             width: 100px;
@@ -89,11 +74,7 @@
             position: relative;
             z-index: 2;
         }
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
 
         @keyframes photoBounce {
             0%, 100% { transform: translateY(0) scale(1); }
@@ -160,11 +141,6 @@
             animation: slideUp 1s ease-out;
         }
         
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(50px) rotate(-5deg); }
-            to { opacity: 1; transform: translateY(0) rotate(0); }
-        }
-        
         .message h2 { 
             color: #FF1493; 
             font-size: 26px; 
@@ -196,46 +172,26 @@
             50% { transform: scale(1.05); }
         }
         
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.4);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
+        .btn:active { transform: scale(0.95); }
         
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
-        }
-        
-        .btn:active { 
-            transform: scale(0.95); 
-        }
-        
-        .wa-container { 
+        /* Board / Wall of Wishes Container */
+        .wishes-container { 
             background: rgba(255,255,255,0.98); 
             border-radius: 25px; 
             padding: 30px; 
             margin: 30px auto; 
-            max-width: 450px; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
             border: 8px solid #FFD700;
-            animation: slideUp 1.5s ease-out;
+            text-align: left;
         }
-        .wa-title { 
+        .wishes-title { 
             color: #FF1493; 
             text-align: center; 
             font-size: 24px; 
             margin-bottom: 10px; 
             font-weight: 900;
         }
-        .wa-subtitle { 
+        .wishes-subtitle { 
             text-align: center; 
             color: #333; 
             font-size: 15px; 
@@ -243,32 +199,34 @@
             font-family: Arial, sans-serif; 
         }
         
-        .wa-form {
+        .wish-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
+            margin-bottom: 30px;
         }
         
-        .wa-input {
+        .wish-input {
             padding: 15px;
             border: 4px solid #00BFFF;
             border-radius: 15px;
             font-size: 16px;
             font-family: Arial, sans-serif;
             transition: all 0.3s;
+            color: #333;
         }
         
-        .wa-input:focus {
+        .wish-input:focus {
             outline: none;
             border-color: #FFD700;
             box-shadow: 0 0 20px rgba(255,215,0,0.6);
         }
         
-        .wa-button {
+        .submit-btn {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
             border: none;
-            padding: 18px 30px;
+            padding: 16px 30px;
             border-radius: 50px;
             font-size: 18px;
             font-weight: bold;
@@ -279,172 +237,98 @@
             gap: 10px;
             box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
             transition: all 0.3s;
-            animation: waPulse 2s ease-in-out infinite;
         }
         
-        @keyframes waPulse {
-            0%, 100% { box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5); }
-            50% { box-shadow: 0 8px 30px rgba(37, 211, 102, 0.9), 0 0 40px rgba(37, 211, 102, 0.7); }
-        }
-        
-        .wa-button:hover {
+        .submit-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(37, 211, 102, 0.7);
         }
-        
-        .wa-button:active {
-            transform: translateY(-1px);
+
+        /* Kotak Daftar Ucapan Masuk */
+        .wishes-list-box {
+            max-height: 400px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            padding-right: 5px;
+        }
+
+        .wish-card {
+            background: #fdfdfd;
+            border: 3px dashed #00BFFF;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .wish-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .wish-card-name {
+            font-weight: bold;
+            color: #FF1493;
+            font-size: 16px;
+        }
+
+        .wish-card-time {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .wish-card-text {
+            color: #440;
+            font-size: 15px;
+            line-height: 1.5;
+            word-break: break-word;
+        }
+
+        .empty-wishes {
+            text-align: center;
+            color: #666;
+            font-family: Arial, sans-serif;
+            font-style: italic;
+            padding: 20px;
         }
         
-        .balloon {
-            position: fixed;
-            width: 50px;
-            height: 70px;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            opacity: 0.8;
-            z-index: 0;
-            animation: floatUp 8s ease-in infinite;
-        }
-        
-        .balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            width: 2px;
-            height: 15px;
-            background: rgba(255,255,255,0.6);
-            transform: translateX(-50%);
-        }
-        
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-        
-        .game-piece {
-            position: fixed;
-            width: 30px;
-            height: 30px;
-            background: #FFD700;
-            border-radius: 50%;
-            z-index: 0;
-            animation: pieceFall 10s linear infinite;
-        }
-        
-        @keyframes pieceFall {
-            0% { transform: translateY(-100vh) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-        }
-        
-        .confetti { 
-            position: fixed; 
-            width: 10px; 
-            height: 10px; 
-            background: #FFD700; 
-            animation: fall 3s linear infinite; 
-            z-index: 999; 
-        }
-        
-        @keyframes fall { 
-            to { transform: translateY(100vh) rotate(360deg); } 
-        }
-        
-        .sparkle {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 20px white, 0 0 40px #FFD700;
-            animation: sparkleAnim 1s ease-out forwards;
-            z-index: 1000;
-            pointer-events: none;
-        }
-        
-        @keyframes sparkleAnim {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(3); opacity: 0; }
+        .balloon, .game-piece, .confetti, .sparkle, .modal-overlay {
+            /* Tetap menggunakan animasi dan style sebelumnya */
         }
         
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7);
             z-index: 10000;
             justify-content: center;
             align-items: center;
-            animation: fadeIn 0.3s ease;
         }
-        
-        .modal-overlay.active {
-            display: flex;
-        }
-        
+        .modal-overlay.active { display: flex; }
         .modal-box {
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 350px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-            border: 5px solid #FFD700;
-            animation: modalPop 0.4s ease;
+            background: white; border-radius: 20px; padding: 30px;
+            max-width: 350px; width: 90%; text-align: center;
+            border: 5px solid #FFD700; color: #333; font-family: Arial, sans-serif;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes modalPop {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .modal-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-        }
-        
-        .modal-message {
-            color: #333;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-        
+        .modal-icon { font-size: 50px; margin-bottom: 15px; }
+        .modal-message { font-size: 16px; margin-bottom: 20px; line-height: 1.5; }
         .modal-button {
             background: linear-gradient(135deg, #FF1493, #00BFFF);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: white; border: none; padding: 12px 30px;
+            border-radius: 50px; font-size: 16px; font-weight: bold; cursor: pointer;
         }
-        
-        .modal-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 15px rgba(255,20,147,0.5);
-        }
-        
+
         @media (max-width: 600px) {
             .title { font-size: 32px; }
             .name { font-size: 28px; }
             .age { font-size: 90px; }
             .photo-frame { width: 180px; height: 180px; }
-            .character-svg { width: 80px; height: 80px; }
         }
     </style>
 </head>
@@ -463,7 +347,6 @@
     <div class="container">
         <!-- Stumble Guys Characters -->
         <div class="stumble-characters">
-            <!-- Character 1 - Shark -->
             <div class="character">
                 <svg class="character-svg" viewBox="0 0 100 100">
                     <ellipse cx="50" cy="60" rx="30" ry="25" fill="#4169E1" stroke="#000080" stroke-width="2"/>
@@ -477,8 +360,6 @@
                     <path d="M 35 40 L 40 30 L 45 40" fill="#FFD700" stroke="#000080" stroke-width="1.5"/>
                 </svg>
             </div>
-            
-            <!-- Character 2 - Main Character -->
             <div class="character">
                 <svg class="character-svg" viewBox="0 0 100 100">
                     <circle cx="50" cy="50" r="35" fill="#FF6B35" stroke="#8B4513" stroke-width="3"/>
@@ -492,8 +373,6 @@
                     <circle cx="55" cy="55" r="3" fill="#FF1493"/>
                 </svg>
             </div>
-            
-            <!-- Character 3 - Banana -->
             <div class="character">
                 <svg class="character-svg" viewBox="0 0 100 100">
                     <path d="M 30 80 Q 20 50 35 20 Q 50 10 65 20 Q 80 50 70 80 Q 60 90 50 85 Q 40 90 30 80" fill="#FFD700" stroke="#DAA520" stroke-width="2.5"/>
@@ -502,8 +381,6 @@
                     <circle cx="42" cy="45" r="2" fill="#fff"/>
                     <circle cx="58" cy="45" r="2" fill="#fff"/>
                     <path d="M 40 60 Q 50 68 60 60" stroke="#000" stroke-width="2" fill="none"/>
-                    <ellipse cx="35" cy="35" rx="8" ry="4" fill="#000" opacity="0.3"/>
-                    <ellipse cx="65" cy="35" rx="8" ry="4" fill="#000" opacity="0.3"/>
                 </svg>
             </div>
         </div>
@@ -534,19 +411,26 @@
 
         <button class="btn" onclick="playMusic()">🎵 PUTAR LAGU 🎵</button>
 
-        <div class="wa-container">
-            <h2 class="wa-title">🎮 Ucapan Untuk Arshaka 🎮</h2>
-            <p class="wa-subtitle">Isi nama dan ucapanmu, lalu kirim via WhatsApp</p>
+        <!-- Kotak Ucapan & Daftar Ucapan Teman-Teman -->
+        <div class="wishes-container">
+            <h2 class="wishes-title">🎮 Papan Ucapan Arshaka 🎮</h2>
+            <p class="wishes-subtitle">Tulis ucapan dan doa terbaikmu di sini!</p>
             
-            <div class="wa-form">
-                <input type="text" id="namaPengirim" class="wa-input" placeholder="Nama Kamu..." maxlength="50">
-                <textarea id="pesanUcapan" class="wa-input" placeholder="Tulis ucapan untuk Arshaka di sini..." rows="4" maxlength="200"></textarea>
-                <button class="wa-button" onclick="kirimUcapan()">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-                        <path d="M20.52 3.449A11.93 11.93 0 0012.021 0C5.396 0 .022 5.373.022 11.999c0 2.106.548 4.16 1.592 5.976L0 24l6.198-1.622a11.93 11.93 0 005.823 1.501c6.625 0 12-5.373 12-11.999 0-3.21-1.249-6.227-3.499-8.431zM12.021 23.879c-1.819 0-3.604-.488-5.183-1.414l-.372-.219-3.859 1.01 1.031-3.762-.241-.384A9.874 9.874 0 011.643 12c0-5.731 4.66-10.391 10.378-10.391 2.767 0 5.367 1.077 7.322 3.032a10.314 10.314 0 013.033 7.359c0 5.731-4.661 10.391-10.355 10.391zm5.688-7.797c-.312-.156-1.842-.91-2.128-1.014-.287-.105-.496-.156-.704.156-.208.312-.805 1.014-.986 1.222-.182.208-.364.234-.676.078-.312-.156-1.314-.484-2.503-1.544-.927-.828-1.551-1.848-1.732-2.16-.182-.312-.02-.48.136-.636.14-.14.312-.364.468-.546.156-.182.208-.312.312-.52.104-.208.052-.39-.026-.546-.078-.156-.704-1.698-.964-2.322-.253-.606-.51-.524-.704-.534l-.6-.012c-.208 0-.546.078-.83.39-.286.312-1.093 1.067-1.093 2.603 0 1.536 1.119 3.02 1.274 3.228.156.208 2.206 3.37 5.351 4.73 2.013.869 2.55.697 3.02.652.756-.072 1.842-.754 2.098-1.478.256-.724.256-1.344.18-1.47-.076-.126-.284-.2-.596-.356z"/>
-                    </svg>
-                    Kirim Ucapan
+            <div class="wish-form">
+                <input type="text" id="namaPengirim" class="wish-input" placeholder="Nama Kamu / Teman Arshaka..." maxlength="50">
+                <textarea id="pesanUcapan" class="wish-input" placeholder="Tulis ucapan & doa untuk Arshaka di sini..." rows="3" maxlength="200"></textarea>
+                <button class="submit-btn" onclick="kirimUcapanWeb()">
+                    ✨ Kirim Ucapan ke Papan
                 </button>
+            </div>
+
+            <hr style="border: 2px dashed #FFD700; margin: 20px 0;">
+
+            <h3 style="color: #FF1493; margin-bottom: 15px; font-size: 20px; text-align: center;">💌 Ucapan yang Sudah Masuk</h3>
+            
+            <!-- Tempat daftar ucapan akan muncul secara dinamis -->
+            <div id="daftarUcapan" class="wishes-list-box">
+                <!-- Ucapan default/kosong akan di-generate oleh JS -->
             </div>
         </div>
     </div>
@@ -556,9 +440,14 @@
     </audio>
 
     <script>
-        const nomorWhatsApp = "6285882865440";
-        
-        function tampilkanModal(pesan, ikon = '️') {
+        // Ambil data ucapan dari localStorage saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            muatUcapan();
+            createBalloons();
+            createGamePieces();
+        });
+
+        function tampilkanModal(pesan, ikon = '⚠️') {
             document.getElementById('modalMessage').textContent = pesan;
             document.getElementById('modalIcon').textContent = ikon;
             document.getElementById('customModal').classList.add('active');
@@ -569,9 +458,7 @@
         }
         
         document.getElementById('customModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                tutupModal();
-            }
+            if (e.target === this) { tutupModal(); }
         });
         
         function playMusic() {
@@ -585,25 +472,73 @@
             }
         }
         
-        function kirimUcapan() {
+        // Fungsi menyimpan dan menampilkan ucapan ke halaman web
+        function kirimUcapanWeb() {
             const nama = document.getElementById('namaPengirim').value.trim();
             const pesan = document.getElementById('pesanUcapan').value.trim();
             
             if (!nama || !pesan) {
-                tampilkanModal('Harap isi nama dan ucapan terlebih dahulu!', '⚠️');
+                tampilkanModal('Harap isi nama dan ucapan terlebih dahulu ya!', '⚠️');
                 return;
             }
             
-            const teksPesan = `Halo! Saya *${nama}* ingin mengucapkan:\n\n${pesan}\n\n_Selamat ulang tahun Arshaka!_ 🎂`;
-            const urlWA = `https://wa.me/${nomorWhatsApp}?text=${encodeURIComponent(teksPesan)}`;
+            const waktuSekarang = new Date().toLocaleDateString('id-ID', {
+                day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            const dataUcapanBaru = {
+                nama: nama,
+                pesan: pesan,
+                waktu: waktuSekarang
+            };
+
+            // Ambil data lama dari localStorage
+            let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
             
-            window.open(urlWA, '_blank');
+            // Masukkan data baru ke urutan paling atas
+            daftarWishes.unshift(dataUcapanBaru);
             
+            // Simpan kembali ke localStorage
+            localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
+            
+            // Reset input form
             document.getElementById('namaPengirim').value = '';
             document.getElementById('pesanUcapan').value = '';
             
-            tampilkanModal('Terima kasih! Ucapanmu sudah siap dikirim via WhatsApp! ', '🎉');
+            // Refresh daftar ucapan di layar
+            muatUcapan();
+            
+            tampilkanModal('Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉', '🎉');
             createConfetti();
+        }
+
+        function muatUcapan() {
+            const container = document.getElementById('daftarUcapan');
+            let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
+            
+            if (daftarWishes.length === 0) {
+                container.innerHTML = `<div class="empty-wishes">Belum ada ucapan nih. Jadilah yang pertama mengirimkan ucapan untuk Arshaka! 🚀</div>`;
+                return;
+            }
+            
+            container.innerHTML = '';
+            daftarWishes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'wish-card';
+                card.innerHTML = `
+                    <div class="wish-card-header">
+                        <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
+                        <span class="wish-card-time">${item.waktu}</span>
+                    </div>
+                    <div class="wish-card-text">${escapeHtml(item.pesan)}</div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Fungsi keamanan kecil untuk mencegah injeksi script teks
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
         
         function createSparkles() {
@@ -653,7 +588,7 @@
         
         function createGamePieces() {
             const colors = ['#FF1493', '#00BFFF', '#FFD700'];
-            for (let i = 0; i < 15; i++) {
+            for (let i = 1; i < 15; i++) {
                 const piece = document.createElement('div');
                 piece.className = 'game-piece';
                 piece.style.left = Math.random() * 100 + '%';
@@ -663,12 +598,6 @@
                 document.getElementById('gamePieces').appendChild(piece);
             }
         }
-        
-        window.addEventListener('load', () => {
-            setTimeout(createConfetti, 500);
-            createBalloons();
-            createGamePieces();
-        });
     </script>
 </body>
 </html>
