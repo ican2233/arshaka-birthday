@@ -33,12 +33,12 @@
             100% { transform: translate(50px, 50px); }
         }
 
-        .container { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .container { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 15px; }
         
         .stumble-characters {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 180px;
             margin: 10px auto;
         }
         
@@ -47,13 +47,13 @@
             animation: characterJump 2s ease-in-out infinite;
         }
         
-        .character:nth-child(1) { left: 10%; top: 20%; animation-delay: 0s; }
+        .character:nth-child(1) { left: 5%; top: 20%; animation-delay: 0s; }
         .character:nth-child(2) { left: 50%; top: 0%; transform: translateX(-50%); animation-delay: 0.5s; }
-        .character:nth-child(3) { right: 10%; top: 30%; animation-delay: 1s; }
+        .character:nth-child(3) { right: 5%; top: 30%; animation-delay: 1s; }
         
         .character-svg {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
         }
         
@@ -63,11 +63,11 @@
         }
         
         .photo-frame { 
-            width: 220px; 
-            height: 220px; 
-            margin: 20px auto; 
+            width: 200px; 
+            height: 200px; 
+            margin: 15px auto; 
             border-radius: 50%; 
-            border: 10px solid #FFD700; 
+            border: 8px solid #FFD700; 
             overflow: hidden; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.5), 0 0 60px rgba(255,215,0,0.7); 
             animation: photoBounce 3s ease-in-out infinite; 
@@ -78,31 +78,31 @@
 
         @keyframes photoBounce {
             0%, 100% { transform: translateY(0) scale(1); }
-            25% { transform: translateY(-20px) scale(1.05); }
+            25% { transform: translateY(-15px) scale(1.03); }
             50% { transform: translateY(0) scale(1); }
-            75% { transform: translateY(-10px) scale(1.02); }
+            75% { transform: translateY(-8px) scale(1.01); }
         }
 
         .title { 
-            font-size: 42px; 
+            font-size: 36px; 
             color: #FFD700; 
             text-shadow: 4px 4px 8px rgba(0,0,0,0.8), 0 0 30px #FFD700, 0 0 50px #FF1493; 
-            margin: 20px 0; 
+            margin: 15px 0; 
             animation: titleBounce 1.5s ease-in-out infinite; 
             font-weight: 900;
         }
         
         @keyframes titleBounce { 
             0%, 100% { transform: scale(1) rotate(-2deg); } 
-            50% { transform: scale(1.1) rotate(2deg); } 
+            50% { transform: scale(1.08) rotate(2deg); } 
         }
         
         .name { 
-            font-size: 38px; 
+            font-size: 32px; 
             color: white; 
             text-shadow: 4px 4px 8px rgba(0,0,0,0.8), 0 0 20px #00BFFF; 
             margin: 10px 0; 
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             animation: nameGlow 2s ease-in-out infinite;
             font-weight: 900;
         }
@@ -113,46 +113,45 @@
         }
         
         .age { 
-            font-size: 120px; 
+            font-size: 100px; 
             color: #FFD700; 
             text-shadow: 6px 6px 12px rgba(0,0,0,0.8), 0 0 50px #FFD700, 0 0 80px #FF1493; 
-            margin: 10px 0; 
+            margin: 5px 0; 
             animation: ageSpin 2s ease-in-out infinite;
             font-weight: 900;
         }
         
         @keyframes ageSpin { 
             0%, 100% { transform: rotate(-15deg) scale(1); } 
-            50% { transform: rotate(15deg) scale(1.15); } 
+            50% { transform: rotate(15deg) scale(1.1); } 
         }
         
         .message { 
             background: rgba(255,255,255,0.98); 
-            border-radius: 25px; 
-            padding: 30px; 
-            margin: 30px 0; 
+            border-radius: 20px; 
+            padding: 20px; 
+            margin: 20px 0; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
-            border: 8px solid #FFD700; 
+            border: 6px solid #FFD700; 
             color: #333; 
             text-align: left; 
             font-family: Arial, sans-serif; 
-            font-size: 16px; 
-            line-height: 1.8;
-            animation: slideUp 1s ease-out;
+            font-size: 15px; 
+            line-height: 1.7;
         }
         
         .message h2 { 
             color: #FF1493; 
-            font-size: 26px; 
-            margin-bottom: 15px; 
+            font-size: 22px; 
+            margin-bottom: 12px; 
             text-align: center; 
             font-weight: 900;
         }
         
         .btn { 
             display: inline-block; 
-            padding: 18px 35px; 
-            font-size: 20px; 
+            padding: 15px 30px; 
+            font-size: 18px; 
             font-weight: 900; 
             color: white; 
             background: linear-gradient(135deg, #FF1493, #FF69B4, #00BFFF); 
@@ -162,38 +161,29 @@
             margin: 10px; 
             box-shadow: 0 10px 30px rgba(255,20,147,0.6), 0 0 40px rgba(0,191,255,0.5); 
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-            animation: btnBounce 2s ease-in-out infinite;
         }
-        
-        @keyframes btnBounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-        
         .btn:active { transform: scale(0.95); }
         
         .wishes-container { 
             background: rgba(255,255,255,0.98); 
             border-radius: 25px; 
-            padding: 30px; 
-            margin: 30px auto; 
+            padding: 20px; 
+            margin: 25px auto; 
             box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
-            border: 8px solid #FFD700;
+            border: 6px solid #FFD700;
             text-align: left;
         }
         .wishes-title { 
             color: #FF1493; 
             text-align: center; 
-            font-size: 24px; 
-            margin-bottom: 10px; 
+            font-size: 22px; 
+            margin-bottom: 6px; 
             font-weight: 900;
         }
         .wishes-subtitle { 
             text-align: center; 
-            color: #333; 
-            font-size: 15px; 
+            color: #555; 
+            font-size: 14px; 
             margin-bottom: 20px; 
             font-family: Arial, sans-serif; 
         }
@@ -201,63 +191,93 @@
         .wish-form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
         .wish-input {
-            padding: 15px;
-            border: 4px solid #00BFFF;
-            border-radius: 15px;
-            font-size: 16px;
+            width: 100%;
+            padding: 12px 16px;
+            border: 3px solid #00BFFF;
+            border-radius: 12px;
+            font-size: 15px;
             font-family: Arial, sans-serif;
             transition: all 0.3s;
             color: #333;
             background: #fff;
         }
         
+        textarea.wish-input {
+            min-height: 90px;
+            resize: vertical;
+            line-height: 1.4;
+        }
+        
         .wish-input:focus {
             outline: none;
             border-color: #FFD700;
-            box-shadow: 0 0 20px rgba(255,215,0,0.6);
+            box-shadow: 0 0 15px rgba(255,215,0,0.5);
         }
         
+        .file-input-wrapper {
+            border: 3px dashed #00BFFF;
+            border-radius: 12px;
+            padding: 10px 14px;
+            background: #f8fdff;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .file-input-wrapper label {
+            color: #FF1493;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            font-size: 13px;
+            color: #555;
+            font-family: Arial, sans-serif;
+        }
+
         .submit-btn {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white;
             border: none;
-            padding: 16px 30px;
+            padding: 14px 25px;
             border-radius: 50px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.5);
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
             transition: all 0.3s;
         }
         
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.7);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.6);
         }
 
         .wishes-list-box {
-            max-height: 500px;
+            max-height: 450px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            padding-right: 5px;
+            gap: 12px;
+            padding-right: 4px;
         }
 
         .wish-card {
             background: #fdfdfd;
             border: 3px dashed #00BFFF;
-            border-radius: 15px;
-            padding: 15px 20px;
+            border-radius: 12px;
+            padding: 12px 16px;
             font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             position: relative;
@@ -267,57 +287,56 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .wish-card-name {
             font-weight: bold;
             color: #FF1493;
-            font-size: 16px;
+            font-size: 15px;
         }
 
         .wish-card-time {
-            font-size: 12px;
+            font-size: 11px;
             color: #888;
-            margin-right: 30px;
+            margin-right: 28px;
         }
 
         .delete-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
+            top: 10px;
+            right: 10px;
             background: #FF4D4D;
             color: white;
             border: none;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.2s;
         }
 
         .delete-btn:hover { background: #CC0000; }
 
         .wish-card-text {
             color: #444;
-            font-size: 15px;
+            font-size: 14px;
             line-height: 1.5;
             word-break: break-word;
         }
 
         .wish-card-img {
-            margin-top: 12px;
+            margin-top: 10px;
             text-align: center;
         }
 
         .wish-card-img img {
             max-width: 100%;
-            max-height: 220px;
-            border-radius: 12px;
+            max-height: 200px;
+            border-radius: 10px;
             border: 2px solid #00BFFF;
             object-fit: cover;
         }
@@ -327,7 +346,8 @@
             color: #666;
             font-family: Arial, sans-serif;
             font-style: italic;
-            padding: 20px;
+            padding: 15px;
+            font-size: 14px;
         }
         
         .modal-overlay {
@@ -350,42 +370,36 @@
         
         .modal-box {
             background: #ffffff;
-            border-radius: 25px;
-            padding: 30px;
-            max-width: 380px;
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 360px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 30px rgba(255,215,0,0.5);
-            border: 6px solid #FFD700;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            border: 5px solid #FFD700;
             color: #333;
             font-family: Arial, sans-serif;
-            transform: scale(0.7) translateY(30px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         
-        .modal-overlay.active .modal-box {
-            transform: scale(1) translateY(0);
-        }
-        
-        .modal-icon { font-size: 45px; margin-bottom: 12px; }
-        .modal-title { font-size: 20px; font-weight: bold; color: #FF1493; margin-bottom: 8px; }
-        .modal-message { font-size: 15px; margin-bottom: 20px; line-height: 1.5; color: #555; }
+        .modal-icon { font-size: 40px; margin-bottom: 10px; }
+        .modal-title { font-size: 18px; font-weight: bold; color: #FF1493; margin-bottom: 6px; }
+        .modal-message { font-size: 14px; margin-bottom: 18px; line-height: 1.4; color: #555; }
         
         .modal-input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 10px 14px;
             border: 3px solid #00BFFF;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 15px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             outline: none;
         }
 
-        .modal-buttons { display: flex; gap: 10px; justify-content: center; }
+        .modal-buttons { display: flex; gap: 8px; justify-content: center; }
         .modal-btn {
-            flex: 1; padding: 12px 20px; border-radius: 50px;
-            font-size: 15px; font-weight: bold; cursor: pointer; border: none;
+            flex: 1; padding: 10px 16px; border-radius: 50px;
+            font-size: 14px; font-weight: bold; cursor: pointer; border: none;
         }
         .modal-btn-cancel { background: #e0e0e0; color: #555; }
         .modal-btn-confirm {
@@ -394,10 +408,11 @@
         }
 
         @media (max-width: 600px) {
-            .title { font-size: 32px; }
-            .name { font-size: 28px; }
-            .age { font-size: 90px; }
-            .photo-frame { width: 180px; height: 180px; }
+            .title { font-size: 28px; }
+            .name { font-size: 24px; }
+            .age { font-size: 80px; }
+            .photo-frame { width: 160px; height: 160px; }
+            .wishes-container { padding: 15px; }
         }
     </style>
 </head>
@@ -496,11 +511,11 @@
             
             <div class="wish-form">
                 <input type="text" id="namaPengirim" class="wish-input" placeholder="Isi Nama Kamu Disini..." maxlength="50">
-                <textarea id="pesanUcapan" class="wish-input" placeholder="Tulis Ucapan & Doa Untuk Arshaka Disini..." rows="3" maxlength="200"></textarea>
+                <textarea id="pesanUcapan" class="wish-input" placeholder="Tulis Ucapan & Doa Untuk Arshaka Disini..." maxlength="200"></textarea>
                 
-                <div style="text-align: left;">
-                    <label style="color: #333; font-size: 14px; font-weight: bold; margin-bottom: 5px; display: block;">📷 Tambahkan Foto (Opsional):</label>
-                    <input type="file" id="fotoPengirim" accept="image/*" class="wish-input" style="padding: 10px; cursor: pointer;">
+                <div class="file-input-wrapper">
+                    <label>📷 Tambahkan Foto (Opsional):</label>
+                    <input type="file" id="fotoPengirim" accept="image/*">
                 </div>
 
                 <button class="submit-btn" onclick="kirimUcapanWeb()">
