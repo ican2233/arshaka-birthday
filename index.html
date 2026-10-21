@@ -174,7 +174,6 @@
         
         .btn:active { transform: scale(0.95); }
         
-        /* Board / Wall of Wishes Container */
         .wishes-container { 
             background: rgba(255,255,255,0.98); 
             border-radius: 25px; 
@@ -244,7 +243,6 @@
             box-shadow: 0 10px 30px rgba(37, 211, 102, 0.7);
         }
 
-        /* Kotak Daftar Ucapan Masuk */
         .wishes-list-box {
             max-height: 400px;
             overflow-y: auto;
@@ -262,6 +260,7 @@
             font-family: Arial, sans-serif;
             box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             animation: fadeIn 0.5s ease;
+            position: relative;
         }
 
         .wish-card-header {
@@ -280,10 +279,33 @@
         .wish-card-time {
             font-size: 12px;
             color: #888;
+            margin-right: 30px;
+        }
+
+        .delete-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #FF4D4D;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .delete-btn:hover {
+            background: #CC0000;
         }
 
         .wish-card-text {
-            color: #440;
+            color: #444;
             font-size: 15px;
             line-height: 1.5;
             word-break: break-word;
@@ -295,10 +317,6 @@
             font-family: Arial, sans-serif;
             font-style: italic;
             padding: 20px;
-        }
-        
-        .balloon, .game-piece, .confetti, .sparkle, .modal-overlay {
-            /* Tetap menggunakan animasi dan style sebelumnya */
         }
         
         .modal-overlay {
@@ -428,10 +446,7 @@
 
             <h3 style="color: #FF1493; margin-bottom: 15px; font-size: 20px; text-align: center;">💌 Ucapan yang Sudah Masuk</h3>
             
-            <!-- Tempat daftar ucapan akan muncul secara dinamis -->
-            <div id="daftarUcapan" class="wishes-list-box">
-                <!-- Ucapan default/kosong akan di-generate oleh JS -->
-            </div>
+            <div id="daftarUcapan" class="wishes-list-box"></div>
         </div>
     </div>
 
@@ -440,7 +455,9 @@
     </audio>
 
     <script>
-        // Ambil data ucapan dari localStorage saat halaman dimuat
+        // Set PIN khusus Admin Anda di sini
+        const ADMIN_PIN = "230793";
+
         document.addEventListener('DOMContentLoaded', () => {
             muatUcapan();
             createBalloons();
@@ -472,7 +489,6 @@
             }
         }
         
-        // Fungsi menyimpan dan menampilkan ucapan ke halaman web
         function kirimUcapanWeb() {
             const nama = document.getElementById('namaPengirim').value.trim();
             const pesan = document.getElementById('pesanUcapan').value.trim();
@@ -487,27 +503,20 @@
             });
 
             const dataUcapanBaru = {
+                id: Date.now(), // Unique ID untuk hapus
                 nama: nama,
                 pesan: pesan,
                 waktu: waktuSekarang
             };
 
-            // Ambil data lama dari localStorage
             let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
-            
-            // Masukkan data baru ke urutan paling atas
             daftarWishes.unshift(dataUcapanBaru);
-            
-            // Simpan kembali ke localStorage
             localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
             
-            // Reset input form
             document.getElementById('namaPengirim').value = '';
             document.getElementById('pesanUcapan').value = '';
             
-            // Refresh daftar ucapan di layar
             muatUcapan();
-            
             tampilkanModal('Yeay! Ucapanmu berhasil ditambahkan ke papan! 🎉', '🎉');
             createConfetti();
         }
@@ -526,6 +535,7 @@
                 const card = document.createElement('div');
                 card.className = 'wish-card';
                 card.innerHTML = `
+                    <button class="delete-btn" onclick="hapusUcapan(${item.id})" title="Hapus (Khusus Admin)">🗑️</button>
                     <div class="wish-card-header">
                         <span class="wish-card-name">🎮 ${escapeHtml(item.nama)}</span>
                         <span class="wish-card-time">${item.waktu}</span>
@@ -536,7 +546,24 @@
             });
         }
 
-        // Fungsi keamanan kecil untuk mencegah injeksi script teks
+        // Fungsi khusus Admin untuk menghapus ucapan dengan PIN
+        function hapusUcapan(id) {
+            const inputPIN = prompt("Masukkan PIN Admin untuk menghapus ucapan ini:");
+            
+            if (inputPIN === null) return; // Batal klik
+
+            if (inputPIN === ADMIN_PIN) {
+                let daftarWishes = JSON.parse(localStorage.getItem('arshakaWishes')) || [];
+                daftarWishes = daftarWishes.filter(item => item.id !== id);
+                localStorage.setItem('arshakaWishes', JSON.stringify(daftarWishes));
+                
+                muatUcapan();
+                tampilkanModal('Ucapan berhasil dihapus!', '🗑️');
+            } else {
+                tampilkanModal('PIN Admin salah! Anda tidak berhak menghapus ucapan.', '❌');
+            }
+        }
+
         function escapeHtml(text) {
             return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
